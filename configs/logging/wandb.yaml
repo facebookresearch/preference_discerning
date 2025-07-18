@@ -1,0 +1,7 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
+writer: wandb
+mode: online
+entity: prefdisc
+project: genrec
+run_id: null

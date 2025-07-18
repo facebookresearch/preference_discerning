@@ -1,0 +1,11 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
+defaults:
+  - _self_
+  - setting: MenderTok_Beauty
+  - logging: wandb
+
+experiment_id: test
+seed: 0
+output_path: null
+use_ddp: false

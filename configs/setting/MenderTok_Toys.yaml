@@ -1,0 +1,112 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
+# data preprocessing
+name: Toys_and_Games
+type: Amazon
+saved_id_path: Toys_and_Games_semantic_id.pkl
+max_items_per_seq: 20
+most_recent: True
+item_cold_start: False
+user_cold_start: False
+features_needed: ['title', 'price', 'brand', 'categories']
+content_model: sentence-t5-xxl
+use_prompt: False
+use_first: True
+train_rqvae: True
+use_amp: True
+encode_instructs: False
+cluster_users: False
+
+RQ-VAE:
+  original_impl: False
+  pca: False
+  standardize: True
+  optimizer: AdamW
+  weight_decay: 0.1
+  batch_size: 2048
+  epochs: 8000
+  lr: 0.001
+  beta: 0.25
+  input_dim: 768
+  hidden_dim:
+    - 768
+    - 512
+    - 256
+  latent_dim: 128
+  num_layers: 3
+  dropout: 0.1
+  code_book_size: 256
+  max_seq_len: 256
+  val_ratio: 0.05
+
+GenRet:
+  evaluate_all: False
+  eval_every: 2
+  ddp_during_inference: False
+  predict_all_from_bucket: False
+  n_positions: 258
+  compile: False
+  num_beams: 10
+  filter_ids: True
+  save_best: "NDCG@10"
+  cold_start_n_filter_ids: 3
+  epsilon: 0.1
+  rerank: False
+  rerank_sub: False
+  hf_name: null
+  hf_encoder: "google/flan-t5-small"
+  cache_hidden_states: False
+  embedded_history: False
+  embedding_model: "instructor-base"
+  center_and_scale: False
+  train_encoder: True
+  instruct_tune: True
+  instruct_first: True
+  mlp_encoder: False
+  train_on_lang: False
+  semantic_ids_in_encoder: False
+  only_attend_inst: True
+  item_as_text: False
+  item_repr: ['title']
+  item_title_plus_inst: True
+  preference_type: 'matched'
+  accumulate_inst: False
+  fine_coarse_data_augmentation: False
+  bernoulli_p: 0.1
+  add_instruction_item_pairs: False
+  add_fine_data: False
+  add_coarse_data: False
+  add_pos_data: False
+  add_neg_data: False
+  rand_lm_head: False
+  tie_weights: False
+  add_user_emb: False
+  vocab_extension: False
+  constrained_beam: False
+  from_pretrained: False
+  use_lora: False
+  T5:
+    encoder_layers: 6
+    decoder_layers: 6
+    d_model: 196
+    d_ff: 1536
+    num_heads: 6
+    d_kv: 64
+    dropout_rate: 0.2
+    initialize_pretrained: True
+    activation_function: "relu"
+    feed_forward_proj: "relu"
+  trainer:
+    steps: 100000
+    lr: 0.0003
+    patience: 15
+    scheduler: "cosine"
+    warmup_steps: 5000
+    weight_decay: 0.035
+    batch_size: 64
+    eval_batch_size: 32
+  lora:
+    lora_r: 16
+    lora_alpha: 1
+    lora_dropout: 0
+    target: ["q", "k", "v", "o"]
